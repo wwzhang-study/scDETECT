@@ -17,6 +17,7 @@ if (!require("devtools", quietly = TRUE))
     install.packages("devtools")
     
 devtools::install_github('wwzhang-study/scDETECT', dependencies=T, build_vignettes = T)
+
 library(scDETECT)
 ```
 
