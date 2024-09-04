@@ -22,7 +22,7 @@ library(scDETECT)
 
 ## Getting started
 In the `scDETECT` package, we provide a toy simulated dataset that you can directly 
-generate using the following code
+generate using the following code:
 
 ```R
 N <- 40
@@ -49,12 +49,7 @@ we simulate single cell RNA-seq data for 500 genes and 10 cells for each cell ty
 Next, you can run `scDETECT` with a single line of code:
 
 ```R
-res_scDETECT <- scDETECT(Y_raw = Y, 
-                         design.1 = design,
-                         design.2 = NULL,
-                         factor.to.test = 'disease',
-                         cutoff.tree = c('tstat',2.58),
-                         cutoff.prior.prob = c('pval',0.01))
+res_scDETECT <- scDETECT(Y_raw = Y, design.1 = design,design.2 = NULL,factor.to.test = 'disease',cutoff.tree = c('tstat',2.58),cutoff.prior.prob = c('pval',0.01))
 ```
 
 Some explanations about the parameters:
@@ -62,9 +57,9 @@ Some explanations about the parameters:
 - **design.1` and `design.2:** Covariates representing interested factors to be tested.
 - **factor.to.test:** A phenotype name, e.g. "disease". 
 
-- **cutoff.tree:** A cut off used to define DE state to estimate tree, which could be 'fdr', 'pval' or 'tstat'.
+- **cutoff.tree:** A cut off used to define DE state to estimate tree, which could be `fdr`, `pval` or `stat`.
 
-- **cutoff.prior.prob:** A cut off used to define DE state to estimate prior probability of nodes on tree, which could be 'fdr' or 'pval'. 
+- **cutoff.prior.prob:** A cut off used to define DE state to estimate prior probability of nodes on tree, which could be `fdr` or `pval`. 
 
 - **pval:** A matrix of p-values from DESeq2. 
 
@@ -80,11 +75,11 @@ Some explanations about the parameters:
 
 - **parallel.core:** The number of cores for parallel running.
 
--**corr.fig=TRUE:** Correlation between cell types will be plotted using function `plotCorr()`. 
+- **corr.fig=TRUE:** Correlation between cell types will be plotted using function `plotCorr()`. 
 
--**run.time=TRUE:** Running time in seconds will be reported.
+- **run.time=TRUE:** Running time in seconds will be reported.
 
--**tree.type:** The tree type for inference.
+- **tree.type:** The tree type for inference.
 
 We can have posterior probability of DE for each gene in each cell type:
 
