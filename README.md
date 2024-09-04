@@ -58,19 +58,32 @@ res_scDETECT <- scDETECT(Y_raw = Y,
 ```
 
 Some explanations about the parameters:
+
 - **design.1` and `design.2:** Covariates representing interested factors to be tested.
--**factor.to.test:** A phenotype name, e.g. "disease". 
--**cutoff.tree:** A cut off used to define DE state to estimate tree, which could be 'fdr', 'pval' or 'tstat'.
--**cutoff.prior.prob:** A cut off used to define DE state to estimate prior probability of nodes on tree, which could be 'fdr' or 'pval'. 
--**pval:** A matrix of p-values from DESeq2.  
--**p.adj:** A matrix of adjusted p-values from DESeq2.
--**tree:** A hierarchical tree structure used to account cell type correlation.
--**p.matrix.input:** A matrix of prior probability on each node of the tree structure.
--**de.state:** DE state of each feature in each cell type.
--**similarity.function:** A custom function used to calculate similarity between cell types that used for tree structure estimation.
--**parallel.core:** The number of cores for parallel running.
+- **factor.to.test:** A phenotype name, e.g. "disease". 
+
+- **cutoff.tree:** A cut off used to define DE state to estimate tree, which could be 'fdr', 'pval' or 'tstat'.
+
+- **cutoff.prior.prob:** A cut off used to define DE state to estimate prior probability of nodes on tree, which could be 'fdr' or 'pval'. 
+
+- **pval:** A matrix of p-values from DESeq2. 
+
+- **p.adj:** A matrix of adjusted p-values from DESeq2.
+
+- **tree:** A hierarchical tree structure used to account cell type correlation.
+
+- **p.matrix.input:** A matrix of prior probability on each node of the tree structure.
+
+- **de.state:** DE state of each feature in each cell type.
+
+- **similarity.function:** A custom function used to calculate similarity between cell types that used for tree structure estimation.
+
+- **parallel.core:** The number of cores for parallel running.
+
 -**corr.fig=TRUE:** Correlation between cell types will be plotted using function `plotCorr()`. 
+
 -**run.time=TRUE:** Running time in seconds will be reported.
+
 -**tree.type:** The tree type for inference.
 
 We can have posterior probability of DE for each gene in each cell type:
