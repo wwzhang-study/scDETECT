@@ -1,0 +1,118 @@
+---
+title: "scDETECT Package Vignette"
+package: scDETECT
+output:
+  BiocStyle::html_document:
+    toc: true
+    toc_float:
+      collapsed: true
+      smooth_scroll: true
+vignette: >
+  %\VignetteIndexEntry{scDETECT Package Vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+```{r knitr-options, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(scDETECT)
+```
+
+# Description of `scDETECT`
+scDETECT is an R package for single-cell RNA-seq DE analysis accounting for the cell type correlations. 
+It first constructs a cell type hierarchical tree to represent the cell type correlations, and then incorporates the correlation in the calculation of the prior probabilities for DE.
+After parameter estimation in data model, the posterior probabilities are then derived 
+based on the Bayesian model for determining the DE state of each gene.
+The main intuition of the method is that the inference for DE states for a gene in one 
+cell type would be influenced by other cell types. Jointly modeling the expression 
+in all cell types creates information sharing, which will improve the statistical inference.
+
+# Input of `scDETECT`
+In the scDETECT package, we provide a toy simulated dataset that you can directly 
+generate using the following code:
+
+```{r}
+N <- 40
+K <- 3
+C <- 10
+P <- 500
+design <- data.frame(disease=factor(sample(0:1,size = N,replace=TRUE)))
+Y = list()
+res = list()
+for (i in 1:K){
+  y.pseudo = c()
+  for (j in 1:N){
+    y = matrix(rnbinom(P*C, size = 1, mu = 1), nrow = P, byrow = FALSE)
+    y.pseudo = cbind(y.pseudo, rowSums(y))
+  }
+  Y[[i]] = y.pseudo
+  rownames(Y[[i]]) <- paste0('gene',1:P)
+}
+```
+In the simulation, we generate 3 cell types and 20 samples per group. In each cell type-sample combination,
+we simulate single cell RNA-seq data for 500 genes and 10 cells for each cell type of each sample. Then we get summation to get pseudo-bulk data `Y` for each cell type.  
+
+# Arguments of `scDETECT`
+We can run `scDETECT` in the following code:
+```{r}
+res_scDETECT <- scDETECT(Y_raw = Y, 
+                         design.1 = design,
+                         design.2 = NULL,
+                         factor.to.test = 'disease',
+                         cutoff.tree = c('tstat',2.58),
+                         cutoff.prior.prob = c('pval',0.01))
+```
+In the function call above, `design.1` and `design.2` are covariates representing interested factors to be tested(e.g. disease, gender or ethnicity) as well as other factors. `factor.to.test` is a phenotype name, e.g. "disease". `cutoff.tree` is a cut off used to define DE state to estimate tree, which could be 'fdr', 'pval' or 'tstat'. `cutoff.prior.prob` is a cut off used to define DE state to estimate prior probability of nodes on tree, which could be 'fdr' or 'pval'. Other arguments are:
+
+`pval` is a matrix of p-values from DESeq2.  
+
+`p.adj` is a matrix of adjusted p-values from DESeq2.
+
+`tree` is a hierarchical tree structure used to account cell type correlation.
+
+`p.matrix.input` is a matrix of prior probability on each node of the tree structure.
+
+`de.state` is DE/DM state of each feature in each cell type.
+
+`similarity.function` is a custom function used to calculate similarity between cell types that used for tree structure estimation.
+
+`parallel.core` is the number of cores for parallel running.
+
+`corr.fig=TRUE` means correlation between cell types will be plotted using function plotCorr(). 
+
+`run.time=TRUE` means running time in seconds will be reported.
+
+`tree.type` is the tree type for inference.
+
+# Results of `scDETECT`
+We can have posterior probability of DE for each gene in each cell type:
+```{r}
+head(res_scDETECT$tree_res$full$pp)
+```
+
+The correlation between cell types was captured by a hierarchical tree estimated
+from test statistics of DESeq2 result:
+```{r}
+res_scDETECT$tree_res$full$tree_structure
+```
+
+Cell types with smaller distance means they are stronger correlated. Different tree structures could be customized. Another simpler tree structure is also used for inference:
+
+```{r}
+res_scDETECT$tree_res$single$tree_structure
+```
+
+The above tree structure simply assumes that correlation between cell types is 
+captured by the root node. When sample size is small or technical noise is large,
+this tree structure is recommended. In default, the function outputs the results 
+from both tree structures.
+
+# Session info
+```{r sessionInfo, echo=FALSE}
+sessionInfo()
+```

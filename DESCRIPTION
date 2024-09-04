@@ -1,0 +1,41 @@
+Package: scDETECT
+Title: Differetial expression analysis for single-cell RNA-seq accounting for 
+    cell type correlation
+Version: 0.1.0
+Authors@R: c(
+    person(given = "Yuhan", family = "Xu", 
+           email = "liuxumengtian@163.com", 
+           role = c("aut","cre")),
+    person(given = "Weiwei", family = "Zhang", 
+           email = "wwzhangly@163.com", 
+           role = c("aut")),
+    person(given = "Hao",family = "Wu",
+           email = "wuhao@siat.ac.cn",
+           role = c("aut"))
+    )
+Description: scDETECT is an R package for single-cell RNA-seq DE analysis 
+    accounting for the cell type correlations. scDETECT implements a Bayesian 
+    hierarchical model to incorporate the cell type correlations into the modeling 
+    of the gene expression, and then the DE genes are called based on the derived 
+    posterior probabilities.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
+Suggests: 
+    BiocStyle,
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
+Imports: 
+    doParallel,
+    GGally,
+    ggplot2,
+    grDevices,
+    parallel,
+    S4Vectors,
+    Seurat,
+    stats,
+    tidyr
+Depends: 
+    DESeq2
